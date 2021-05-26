@@ -6,13 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    protected $guarded = [];
+    protected $guarded = ['tags'];
 
     
     // Function to get comments
-    public function getComments(){
+    public function comments(){
 
         return $this->hasMany('App\Comment');// Model Comment
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
+    }
 }
