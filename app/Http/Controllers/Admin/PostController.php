@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Post;
 use App\Tag;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -71,7 +72,10 @@ class PostController extends Controller
             $newPost->tags()->attach($data['tags']);
         }
 
-       
+        // Upload dell'immagine 
+        if ( isset($data['image']) ) {
+            $data['image'] = Storage::disk('public')->put('images', $data['image']);
+        }
         return redirect()->route('admin.posts.index');
     }
 
@@ -122,7 +126,13 @@ class PostController extends Controller
         // Impostazione slug partendo dal titolo
         $data['slug'] = Str::slug($data['title'], '-');
 
-      
+        
+        // Upload dell'immagine 
+        if ( isset($data['image']) ) {
+            $data['image'] = Storage::disk('public')->put('images', $data['image']);
+        }
+
+
         $post->update($data);
 
         // Aggiorno i tag controllando se sono stati passati
